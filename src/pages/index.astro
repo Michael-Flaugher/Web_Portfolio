@@ -56,6 +56,17 @@ import '../styles/global.css';
 			box-shadow: 0 4px 24px rgba(0,0,0,0.3);
 		}
 
+		/* == BADGE GRID — 3 columns on desktop, 2 on mobile == */
+		.badge-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 16px;
+		}
+
+		@media (max-width: 480px) {
+			.badge-grid { grid-template-columns: repeat(2, 1fr); }
+		}
+
 		/* == BADGE — each credential tile.
 		   flex-direction: column stacks logo, text, and link vertically. == */
 		.badge {
@@ -250,7 +261,7 @@ import '../styles/global.css';
 
 			<!-- grid-template-columns: repeat(3, 1fr) = 3 equal columns.
 			     Change the number to adjust columns: repeat(2, 1fr) = 2 cols, etc. -->
-			<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+			<div class="badge-grid">
 
 				<!-- -- CSAP -- -->
 				<!-- Badge: onclick opens the matching modal by its id -->
