@@ -549,28 +549,27 @@ import '../styles/global.css';
 			}
 		});
 
-		// == navTo — close menu, scroll section to viewport center, flash card ==
+		// == navTo — close menu, scroll card to viewport center, flash it ==
 		function navTo(sectionId) {
-			// Close the dropdown first
 			document.getElementById('hamburger').classList.remove('open');
 			document.getElementById('nav-menu').classList.remove('open');
 
 			const section = document.getElementById(sectionId);
 			if (!section) return;
 
-			// Manually calculate scroll position so the section is truly centered:
-			// Take the section's top position, subtract half the viewport height,
-			// then add half the section's own height — puts it dead center.
-			const sectionTop    = section.getBoundingClientRect().top + window.scrollY;
-			const sectionHeight = section.offsetHeight;
-			const viewportHeight = window.innerHeight;
-			const scrollTo = sectionTop - (viewportHeight / 2) + (sectionHeight / 2);
+			const navHeight = 58; // matches nav height in CSS
+			const card = section.querySelector('.card');
+			const target = card || section;
 
-			window.scrollTo({ top: scrollTo, behavior: 'smooth' });
+			// Center the card in the space BELOW the navbar
+			const targetTop    = target.getBoundingClientRect().top + window.scrollY;
+			const targetHeight = target.offsetHeight;
+			const available    = window.innerHeight - navHeight;
+			const scrollTo     = targetTop - navHeight - (available / 2) + (targetHeight / 2);
 
-			// Flash the card after scroll settles
+			window.scrollTo({ top: Math.max(0, scrollTo), behavior: 'smooth' });
+
 			setTimeout(function() {
-				const card = section.querySelector('.card');
 				if (!card) return;
 				card.classList.remove('flash');
 				void card.offsetWidth;
