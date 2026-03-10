@@ -558,14 +558,20 @@ import '../styles/global.css';
 			const section = document.getElementById(sectionId);
 			if (!section) return;
 
-			// block:'center' puts the section in the middle of the screen
-			section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			// Manually calculate scroll position so the section is truly centered:
+			// Take the section's top position, subtract half the viewport height,
+			// then add half the section's own height — puts it dead center.
+			const sectionTop    = section.getBoundingClientRect().top + window.scrollY;
+			const sectionHeight = section.offsetHeight;
+			const viewportHeight = window.innerHeight;
+			const scrollTo = sectionTop - (viewportHeight / 2) + (sectionHeight / 2);
 
-			// Short delay so scroll is underway before the flash fires
+			window.scrollTo({ top: scrollTo, behavior: 'smooth' });
+
+			// Flash the card after scroll settles
 			setTimeout(function() {
 				const card = section.querySelector('.card');
 				if (!card) return;
-				// Remove class, force reflow, re-add — so it replays if clicked again
 				card.classList.remove('flash');
 				void card.offsetWidth;
 				card.classList.add('flash');
