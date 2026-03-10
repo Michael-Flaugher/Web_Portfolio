@@ -549,23 +549,25 @@ import '../styles/global.css';
 			}
 		});
 
-		// == navTo — close menu, scroll card to viewport center, flash it ==
+		// == navTo — scroll card to viewport center, flash it ==
 		function navTo(sectionId) {
-			document.getElementById('hamburger').classList.remove('open');
-			document.getElementById('nav-menu').classList.remove('open');
-
 			const section = document.getElementById(sectionId);
 			if (!section) return;
 
-			const navHeight = 58; // matches nav height in CSS
 			const card = section.querySelector('.card');
 			const target = card || section;
 
-			// Center the card in the space BELOW the navbar
-			const targetTop    = target.getBoundingClientRect().top + window.scrollY;
+			// Measure BEFORE closing the menu — closing it can cause layout shift
+			// which would make getBoundingClientRect() return wrong values
+			const targetTop    = target.getBoundingClientRect().top + window.pageYOffset;
 			const targetHeight = target.offsetHeight;
+			const navHeight    = 58;
 			const available    = window.innerHeight - navHeight;
 			const scrollTo     = targetTop - navHeight - (available / 2) + (targetHeight / 2);
+
+			// Now close the menu
+			document.getElementById('hamburger').classList.remove('open');
+			document.getElementById('nav-menu').classList.remove('open');
 
 			window.scrollTo({ top: Math.max(0, scrollTo), behavior: 'smooth' });
 
@@ -574,7 +576,7 @@ import '../styles/global.css';
 				card.classList.remove('flash');
 				void card.offsetWidth;
 				card.classList.add('flash');
-			}, 420);
+			}, 450);
 		}
 
 	</script>
