@@ -3,26 +3,24 @@
 // git add .
 // git commit -m "describe what you changed"
 // git push
-// FRONTMATTER — server-side logic, imports, and variables go here.
 import '../styles/global.css';
 ---
 
 <html lang="en">
 <head>
-	<!-- == HEAD == -->
 	<meta charset="utf-8" />
 	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 	<meta name="viewport" content="width=device-width" />
 	<meta name="generator" content={Astro.generator} />
 	<title>Michael Flaugher</title>
 
-	<!-- No external fonts — Arial renders sharply on all systems -->
-
 	<style>
 		/* == RESET == */
 		* { margin: 0; padding: 0; box-sizing: border-box; }
 
-		/* == BODY — Arial for crisp, sharp rendering == */
+		/* Slower smooth scroll — more elegant feel */
+		html { scroll-behavior: auto; } /* JS controls scroll, this just ensures no conflict */
+		* { scroll-behavior: auto; }
 		body {
 			font-family: Arial, Helvetica, sans-serif;
 			background-color: #0d1117;
@@ -30,11 +28,7 @@ import '../styles/global.css';
 			min-height: 100vh;
 		}
 
-		/* == HEADINGS — Arial Black for maximum weight and sharpness == */
 		h1, h2, h3 { font-family: 'Arial Black', Arial, sans-serif; }
-
-		/* == SMOOTH SCROLL == */
-		html { scroll-behavior: smooth; }
 
 		/* == CARD == */
 		.card {
@@ -44,7 +38,7 @@ import '../styles/global.css';
 			box-shadow: 0 4px 24px rgba(0,0,0,0.3);
 		}
 
-		/* == BADGE GRID — 3 cols desktop, 2 cols mobile == */
+		/* == BADGE GRID == */
 		.badge-grid {
 			display: grid;
 			grid-template-columns: repeat(3, 1fr);
@@ -75,7 +69,7 @@ import '../styles/global.css';
 		.badge img { width: 64px; height: 64px; }
 		.badge:hover { border-color: #388bfd60; color: #c9d1d9; background: #1f2937; }
 
-		/* == MODAL OVERLAY == */
+		/* == MODAL == */
 		.modal-overlay {
 			display: none;
 			position: fixed;
@@ -118,7 +112,6 @@ import '../styles/global.css';
 			letter-spacing: 0.14em;
 			color: #58a6ff;
 			margin-bottom: 8px;
-			font-family: Arial, sans-serif;
 			font-weight: 700;
 		}
 
@@ -157,9 +150,7 @@ import '../styles/global.css';
 			flex-shrink: 0;
 		}
 
-		/* ============================================================
-		   NAVBAR
-		   ============================================================ */
+		/* == NAVBAR == */
 		nav {
 			display: flex;
 			justify-content: space-between;
@@ -173,7 +164,7 @@ import '../styles/global.css';
 			z-index: 200;
 		}
 
-		/* == HAMBURGER BUTTON — 3 horizontal lines == */
+		/* == HAMBURGER == */
 		.hamburger {
 			background: none;
 			border: 1px solid #30363d;
@@ -194,7 +185,6 @@ import '../styles/global.css';
 			border-radius: 2px;
 			transition: all 0.25s ease;
 		}
-		/* Animate into X when open */
 		.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 		.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 		.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
@@ -215,6 +205,7 @@ import '../styles/global.css';
 		}
 		.nav-menu.open { display: block; }
 
+		/* No href on these — JS handles all navigation */
 		.nav-menu a {
 			display: flex;
 			align-items: center;
@@ -226,21 +217,19 @@ import '../styles/global.css';
 			font-size: 0.88rem;
 			font-weight: 700;
 			font-family: Arial, sans-serif;
+			cursor: pointer;
 			transition: background 0.15s;
 		}
 		.nav-menu a:hover { background: #1c2128; color: #e6edf3; }
 		.nav-icon { width: 22px; text-align: center; font-style: normal; }
 
-		/* ============================================================
-		   SECTION FLASH — faint white border glow when nav link is clicked
-		   ============================================================ */
+		/* == SECTION FLASH — softened, stretched out for elegant feel == */
 		@keyframes sectionFlash {
 			0%   { box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
-			20%  { box-shadow: 0 0 0 3px rgba(255,255,255,0.28),
-			                   0 4px 32px rgba(56,139,253,0.3); }
+			20%  { box-shadow: 0 0 0 2px rgba(255,255,255,0.12), 0 4px 28px rgba(56,139,253,0.18); }
 			100% { box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
 		}
-		.flash { animation: sectionFlash 0.85s ease forwards; }
+		.flash { animation: sectionFlash 1.7s ease forwards; }
 	</style>
 </head>
 
@@ -253,20 +242,17 @@ import '../styles/global.css';
 			<span style="font-size:0.75rem;color:#8b949e;">flaugher111413@gmail.com</span>
 		</div>
 
-		<!-- 3-line hamburger — top-right corner -->
 		<button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Open navigation menu">
-			<span></span>
-			<span></span>
-			<span></span>
+			<span></span><span></span><span></span>
 		</button>
 
-		<!-- Dropdown: one link per section -->
+		<!-- No href attributes — prevents browser anchor jump fighting our scroll -->
 		<div class="nav-menu" id="nav-menu">
-			<a href="#about"       onclick="navTo('about')">      <i class="nav-icon">👤</i> About</a>
-			<a href="#credentials" onclick="navTo('credentials')"><i class="nav-icon">🏅</i> Certifications</a>
-			<a href="#education"   onclick="navTo('education')">  <i class="nav-icon">🎓</i> Education</a>
-			<a href="#experience"  onclick="navTo('experience')"> <i class="nav-icon">🎖️</i> Experience</a>
-			<a href="#connect"     onclick="navTo('connect')">    <i class="nav-icon">🔗</i> Connect</a>
+			<a onclick="navTo('about')">      <i class="nav-icon">👤</i> About</a>
+			<a onclick="navTo('credentials')"><i class="nav-icon">🏅</i> Certifications</a>
+			<a onclick="navTo('education')">  <i class="nav-icon">🎓</i> Education</a>
+			<a onclick="navTo('experience')"> <i class="nav-icon">🎖️</i> Experience</a>
+			<a onclick="navTo('connect')">    <i class="nav-icon">🔗</i> Connect</a>
 		</div>
 	</nav>
 
@@ -280,7 +266,6 @@ import '../styles/global.css';
 			font-size:2.8rem;margin:0 auto 24px;
 			box-shadow:0 0 0 6px #161b22,0 16px 32px rgba(0,0,0,0.4);
 		">👤</div>
-
 		<p style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.14em;color:#58a6ff;margin-bottom:12px;font-weight:700;">IT Specialist & Veteran</p>
 		<h1 style="font-size:2.6rem;font-weight:900;color:#e6edf3;line-height:1.1;margin-bottom:16px;">Michael Flaugher</h1>
 		<p style="font-size:1rem;line-height:1.8;color:#8b949e;max-width:480px;margin:0 auto 32px;">
@@ -310,9 +295,7 @@ import '../styles/global.css';
 								<p style="color:#58a6ff;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;">Security Analytics Professional</p>
 							</div>
 						</div>
-						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">
-							The CSAP stackable certification is earned by holding both CySA+ and Security+, demonstrating advanced security analytics and operations expertise.
-						</p>
+						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">The CSAP stackable certification is earned by holding both CySA+ and Security+, demonstrating advanced security analytics and operations expertise.</p>
 						<div style="display:flex;gap:10px;">
 							<a href="/CSAP_Cert.pdf" target="_blank" class="modal-btn" style="background:#388bfd;color:white;">View Certificate</a>
 							<a href="https://www.comptia.org/certifications/which-certification/stackable-certifications" target="_blank" class="modal-btn" style="border:1px solid #30363d;color:#c9d1d9;">Learn More</a>
@@ -334,9 +317,7 @@ import '../styles/global.css';
 								<p style="color:#58a6ff;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;">Cybersecurity Analyst</p>
 							</div>
 						</div>
-						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">
-							The CySA+ certifies the ability to detect, analyze, and respond to cybersecurity threats using behavioral analytics tools and techniques.
-						</p>
+						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">The CySA+ certifies the ability to detect, analyze, and respond to cybersecurity threats using behavioral analytics tools and techniques.</p>
 						<div style="display:flex;gap:10px;">
 							<a href="/CySA+_Cert.pdf" target="_blank" class="modal-btn" style="background:#388bfd;color:white;">View Certificate</a>
 							<a href="https://www.comptia.org/certifications/cybersecurity-analyst" target="_blank" class="modal-btn" style="border:1px solid #30363d;color:#c9d1d9;">Learn More</a>
@@ -358,9 +339,7 @@ import '../styles/global.css';
 								<p style="color:#58a6ff;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;">Security Fundamentals</p>
 							</div>
 						</div>
-						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">
-							Security+ is the industry standard for validating baseline cybersecurity skills covering threats, vulnerabilities, architecture, and incident response.
-						</p>
+						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">Security+ is the industry standard for validating baseline cybersecurity skills covering threats, vulnerabilities, architecture, and incident response.</p>
 						<div style="display:flex;gap:10px;">
 							<a href="/Sec+_Cert.pdf" target="_blank" class="modal-btn" style="background:#388bfd;color:white;">View Certificate</a>
 							<a href="https://www.comptia.org/certifications/security" target="_blank" class="modal-btn" style="border:1px solid #30363d;color:#c9d1d9;">Learn More</a>
@@ -382,9 +361,7 @@ import '../styles/global.css';
 								<p style="color:#58a6ff;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;">IT Fundamentals</p>
 							</div>
 						</div>
-						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">
-							ITF+, now Tech+, establishes a foundation of core IT knowledge covering hardware, software, networking, databases, and security concepts.
-						</p>
+						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">ITF+, now Tech+, establishes a foundation of core IT knowledge covering hardware, software, networking, databases, and security concepts.</p>
 						<div style="display:flex;gap:10px;">
 							<a href="/ITF+_Cert.pdf" target="_blank" class="modal-btn" style="background:#388bfd;color:white;">View Certificate</a>
 							<a href="https://www.comptia.org/certifications/it-fundamentals" target="_blank" class="modal-btn" style="border:1px solid #30363d;color:#c9d1d9;">Learn More</a>
@@ -396,20 +373,13 @@ import '../styles/global.css';
 				<span class="badge" onclick="document.getElementById('modal-amu').style.display='flex'">
 					<img src="/AMU.png" alt="AMU" />BS in IT
 				</span>
-				<div id="modal-amu" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
-					<div class="modal-box">
-						<button class="modal-close" onclick="document.getElementById('modal-amu').style.display='none'">✕</button>
-						<h3 style="color:#e6edf3;">American Military University</h3>
-						<p style="color:#8b949e;">Bachelor of Science in Information Technology</p>
-					</div>
-				</div>
 				-->
 
 			</div>
 		</div>
 	</section>
 
-	<!-- == EDUCATION — its own section == -->
+	<!-- == EDUCATION == -->
 	<section id="education" style="max-width:640px;margin:0 auto;padding:0 24px 32px;">
 		<div class="card" style="padding:32px;">
 			<p class="section-title">Education</p>
@@ -430,9 +400,7 @@ import '../styles/global.css';
 								<p style="color:#58a6ff;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;">Programming Certificate</p>
 							</div>
 						</div>
-						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">
-							Completed SoloLearn's C++ course, covering core programming concepts including variables, loops, functions, object-oriented programming, and memory management.
-						</p>
+						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">Completed SoloLearn's C++ course, covering core programming concepts including variables, loops, functions, object-oriented programming, and memory management.</p>
 						<div style="display:flex;gap:10px;">
 							<a href="/SoloLearn_Cpp.pdf" target="_blank" class="modal-btn" style="background:#388bfd;color:white;">View Certificate</a>
 							<a href="https://www.sololearn.com" target="_blank" class="modal-btn" style="border:1px solid #30363d;color:#c9d1d9;">Learn More</a>
@@ -454,9 +422,7 @@ import '../styles/global.css';
 								<p style="color:#58a6ff;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;">Syracuse University · IVMF</p>
 							</div>
 						</div>
-						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">
-							Syracuse University's Onward to Opportunity (O2O) is a no-cost career skills program connecting transitioning service members to high-demand careers in IT, business, and more.
-						</p>
+						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">Syracuse University's Onward to Opportunity (O2O) is a no-cost career skills program connecting transitioning service members to high-demand careers in IT, business, and more.</p>
 						<div style="display:flex;gap:10px;">
 							<a href="/O2O_Cert.pdf" target="_blank" class="modal-btn" style="background:#388bfd;color:white;">View Certificate</a>
 							<a href="https://ivmf.syracuse.edu/programs/career-training/" target="_blank" class="modal-btn" style="border:1px solid #30363d;color:#c9d1d9;">Learn More</a>
@@ -468,13 +434,12 @@ import '../styles/global.css';
 		</div>
 	</section>
 
-	<!-- == EXPERIENCE — its own section, ready for veteran content == -->
+	<!-- == EXPERIENCE == -->
 	<section id="experience" style="max-width:640px;margin:0 auto;padding:0 24px 32px;">
 		<div class="card" style="padding:32px;">
 			<p class="section-title">Experience</p>
 			<div class="divider"></div>
 			<div class="badge-grid">
-				<!-- TODO: Add Veteran badge, awards, and service highlights here -->
 				<div style="grid-column:1/-1;padding:20px 0;text-align:center;color:#484f58;font-size:0.85rem;">
 					Awards, service records, and highlights coming soon.
 				</div>
@@ -483,7 +448,7 @@ import '../styles/global.css';
 	</section>
 
 	<!-- == CONNECT == -->
-	<section id="connect" style="max-width:640px;margin:0 auto;padding:0 24px 80px;">
+	<section id="connect" style="max-width:640px;margin:0 auto;padding:0 24px 32px;">
 		<div class="card" style="padding:32px;">
 			<p class="section-title">Connect With Me</p>
 			<div class="divider"></div>
@@ -526,20 +491,19 @@ import '../styles/global.css';
 		</div>
 	</section>
 
-	<!-- == FOOTER — tall padding gives scroll room to center any section == -->
-	<footer style="border-top:1px solid #21262d;text-align:center;padding:24px;font-size:0.8rem;color:#484f58;padding-bottom:60vh;">
+	<!-- == FOOTER — 60vh bottom padding gives scroll room to center any section == -->
+	<footer style="border-top:1px solid #21262d;text-align:center;padding:24px 24px 60vh;font-size:0.8rem;color:#484f58;">
 		© 2026 Michael Flaugher · Built with Astro
 	</footer>
 
 	<script is:inline>
 
-		// == HAMBURGER — toggle menu open/closed ==
+		// == HAMBURGER ==
 		function toggleMenu() {
 			document.getElementById('hamburger').classList.toggle('open');
 			document.getElementById('nav-menu').classList.toggle('open');
 		}
 
-		// Close menu when clicking anywhere outside it
 		document.addEventListener('click', function(e) {
 			const btn  = document.getElementById('hamburger');
 			const menu = document.getElementById('nav-menu');
@@ -549,35 +513,47 @@ import '../styles/global.css';
 			}
 		});
 
-		// == navTo — scroll card to viewport center, flash it ==
+		// == navTo ==
+		// No href on the links, so no anchor jump to fight.
+		// No scroll-behavior:smooth on html, so window.scrollTo has full control.
 		function navTo(sectionId) {
-			const section = document.getElementById(sectionId);
-			if (!section) return;
-
-			const card = section.querySelector('.card');
-			const target = card || section;
-
-			// Measure position relative to the whole document
-			const rect         = target.getBoundingClientRect();
-			const absTop       = rect.top + window.pageYOffset;
-			const targetHeight = rect.height;
-
-			// Center the card in the viewport, then nudge down by half the navbar
-			// so it clears the sticky nav without overcorrecting
-			const scrollTo = absTop - (window.innerHeight / 2) + (targetHeight / 2) + 29;
-
-			// Close menu after measuring so layout shift doesn't affect numbers
+			// Close menu first
 			document.getElementById('hamburger').classList.remove('open');
 			document.getElementById('nav-menu').classList.remove('open');
 
-			window.scrollTo({ top: Math.max(0, scrollTo), behavior: 'smooth' });
+			const section = document.getElementById(sectionId);
+			if (!section) return;
 
+			const card = section.querySelector('.card') || section;
+
+			// Card's distance from top of document
+			const cardTop    = card.getBoundingClientRect().top + window.pageYOffset;
+			const cardHeight = card.offsetHeight;
+
+			// Scroll so card midpoint = viewport midpoint
+			const scrollTo = cardTop - (window.innerHeight / 2) + (cardHeight / 2);
+
+			// Slow elegant eased scroll — 900ms ease-in-out
+			const startY    = window.pageYOffset;
+			const distance  = Math.max(0, scrollTo) - startY;
+			const duration  = 900;
+			const startTime = performance.now();
+
+			(function scrollStep(now) {
+				const elapsed = now - startTime;
+				const t       = Math.min(elapsed / duration, 1);
+				// Ease-in-out cubic
+				const eased   = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2;
+				window.scrollTo(0, startY + distance * eased);
+				if (t < 1) requestAnimationFrame(scrollStep);
+			})(performance.now());
+
+			// Flash after scroll settles
 			setTimeout(function() {
-				if (!card) return;
 				card.classList.remove('flash');
 				void card.offsetWidth;
 				card.classList.add('flash');
-			}, 450);
+			}, 700);
 		}
 
 	</script>
