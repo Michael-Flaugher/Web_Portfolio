@@ -526,8 +526,8 @@ import '../styles/global.css';
 		</div>
 	</section>
 
-	<!-- == FOOTER == -->
-	<footer style="border-top:1px solid #21262d;text-align:center;padding:24px;font-size:0.8rem;color:#484f58;">
+	<!-- == FOOTER — tall padding gives scroll room to center any section == -->
+	<footer style="border-top:1px solid #21262d;text-align:center;padding:24px;font-size:0.8rem;color:#484f58;padding-bottom:60vh;">
 		© 2026 Michael Flaugher · Built with Astro
 	</footer>
 
@@ -557,15 +557,16 @@ import '../styles/global.css';
 			const card = section.querySelector('.card');
 			const target = card || section;
 
-			// Measure BEFORE closing the menu — closing it can cause layout shift
-			// which would make getBoundingClientRect() return wrong values
-			const targetTop    = target.getBoundingClientRect().top + window.pageYOffset;
-			const targetHeight = target.offsetHeight;
-			const navHeight    = 58;
-			const available    = window.innerHeight - navHeight;
-			const scrollTo     = targetTop - navHeight - (available / 2) + (targetHeight / 2);
+			// Measure position relative to the whole document
+			const rect         = target.getBoundingClientRect();
+			const absTop       = rect.top + window.pageYOffset;
+			const targetHeight = rect.height;
 
-			// Now close the menu
+			// Center the card in the viewport, then nudge down by half the navbar
+			// so it clears the sticky nav without overcorrecting
+			const scrollTo = absTop - (window.innerHeight / 2) + (targetHeight / 2) + 29;
+
+			// Close menu after measuring so layout shift doesn't affect numbers
 			document.getElementById('hamburger').classList.remove('open');
 			document.getElementById('nav-menu').classList.remove('open');
 
