@@ -4,51 +4,39 @@
 // git commit -m "describe what you changed"
 // git push
 // FRONTMATTER — server-side logic, imports, and variables go here.
-// Currently only importing our global Tailwind CSS file.
 import '../styles/global.css';
 ---
 
 <html lang="en">
 <head>
-	<!-- == HEAD — invisible page settings == -->
-
-	<!-- UTF-8 encoding — supports all characters and emojis -->
+	<!-- == HEAD == -->
 	<meta charset="utf-8" />
-	<!-- Small icon shown in the browser tab -->
 	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-	<!-- Scales the page correctly on phones and tablets -->
 	<meta name="viewport" content="width=device-width" />
-	<!-- Astro auto-fills its version here — leave this alone -->
 	<meta name="generator" content={Astro.generator} />
-	<!-- Text shown in the browser tab -->
 	<title>Michael Flaugher</title>
 
-	<!-- Google Fonts — preconnect speeds up font loading.
-	     Sora = headings | Inter = body text -->
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-	<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+	<!-- No external fonts — Arial renders sharply on all systems -->
 
 	<style>
-		/* == RESET — remove browser default spacing for a clean slate.
-		   box-sizing: border-box = padding included in width calculations. == */
+		/* == RESET == */
 		* { margin: 0; padding: 0; box-sizing: border-box; }
 
-		/* == BODY — base styles for the whole page == */
+		/* == BODY — Arial for crisp, sharp rendering == */
 		body {
-			font-family: 'Inter', sans-serif;
-			background-color: #0d1117; /* dark navy background */
-			color: #c9d1d9;            /* default text color */
-			min-height: 100vh;         /* always full screen height */
+			font-family: Arial, Helvetica, sans-serif;
+			background-color: #0d1117;
+			color: #c9d1d9;
+			min-height: 100vh;
 		}
 
-		/* == HEADINGS — use Sora for visual hierarchy == */
-		h1, h2, h3, nav span { font-family: 'Sora', sans-serif; }
+		/* == HEADINGS — Arial Black for maximum weight and sharpness == */
+		h1, h2, h3 { font-family: 'Arial Black', Arial, sans-serif; }
 
-		/* == SMOOTH SCROLL — nav links animate instead of jumping == */
+		/* == SMOOTH SCROLL == */
 		html { scroll-behavior: smooth; }
 
-		/* == CARD — reusable raised surface. Add class="card" to any element. == */
+		/* == CARD == */
 		.card {
 			background: #161b22;
 			border: 1px solid #21262d;
@@ -56,19 +44,17 @@ import '../styles/global.css';
 			box-shadow: 0 4px 24px rgba(0,0,0,0.3);
 		}
 
-		/* == BADGE GRID — 3 columns on desktop, 2 on mobile == */
+		/* == BADGE GRID — 3 cols desktop, 2 cols mobile == */
 		.badge-grid {
 			display: grid;
 			grid-template-columns: repeat(3, 1fr);
 			gap: 16px;
 		}
-
 		@media (max-width: 480px) {
 			.badge-grid { grid-template-columns: repeat(2, 1fr); }
 		}
 
-		/* == BADGE — each credential tile.
-		   flex-direction: column stacks logo, text, and link vertically. == */
+		/* == BADGE == */
 		.badge {
 			display: flex;
 			flex-direction: column;
@@ -80,31 +66,25 @@ import '../styles/global.css';
 			border: 2px solid #30363d;
 			border-radius: 12px;
 			font-size: 0.75rem;
-			font-weight: 750;
+			font-weight: 700;
 			color: #8b949e;
 			transition: all 0.2s;
 			text-align: center;
+			cursor: pointer;
 		}
-		/* Badge logo size */
 		.badge img { width: 64px; height: 64px; }
-		/* Blue glow on hover — 60 suffix = 37% opacity */
-		.badge:hover {
-			border-color: #388bfd60;
-			color: #c9d1d9;
-			background: #1f2937;
-		}
+		.badge:hover { border-color: #388bfd60; color: #c9d1d9; background: #1f2937; }
 
-		/* == MODAL OVERLAY — full screen dark backdrop behind popups == */
+		/* == MODAL OVERLAY == */
 		.modal-overlay {
-			display: none;        /* hidden until badge is clicked */
-			position: fixed;      /* stays in place while scrolling */
-			inset: 0;             /* covers the entire screen */
+			display: none;
+			position: fixed;
+			inset: 0;
 			background: rgba(0,0,0,0.75);
-			z-index: 999;         /* sits above everything else */
+			z-index: 999;
 			align-items: center;
 			justify-content: center;
 		}
-		/* == MODAL BOX — the actual popup container == */
 		.modal-box {
 			background: #161b22;
 			border: 1px solid #30363d;
@@ -115,42 +95,34 @@ import '../styles/global.css';
 			margin: 24px;
 			position: relative;
 		}
-		/* == MODAL CLOSE — X button in top right corner == */
 		.modal-close {
 			position: absolute;
-			top: 14px;
-			right: 16px;
-			background: none;
-			border: none;
-			color: #8b949e;
-			font-size: 1.1rem;
-			cursor: pointer;
-			line-height: 1;
+			top: 14px; right: 16px;
+			background: none; border: none;
+			color: #8b949e; font-size: 1.1rem; cursor: pointer;
 		}
 		.modal-close:hover { color: #e6edf3; }
-
-		/* == MODAL BUTTON — View Certificate / Learn More buttons == */
 		.modal-btn {
 			padding: 8px 20px;
 			border-radius: 8px;
 			text-decoration: none;
 			font-size: 0.85rem;
-			font-weight: 500;
+			font-weight: 600;
+			font-family: Arial, sans-serif;
 		}
 
-		/* == SECTION TITLE — small uppercase label above each section == */
+		/* == SECTION TITLE == */
 		.section-title {
 			font-size: 0.7rem;
 			text-transform: uppercase;
 			letter-spacing: 0.14em;
 			color: #58a6ff;
 			margin-bottom: 8px;
-			font-family: 'Inter', sans-serif;
-			font-weight: 500;
+			font-family: Arial, sans-serif;
+			font-weight: 700;
 		}
 
-		/* == DIVIDER — blue accent line under section titles.
-		   Fades from blue to transparent left to right. == */
+		/* == DIVIDER == */
 		.divider {
 			width: 300px;
 			height: 2px;
@@ -159,8 +131,7 @@ import '../styles/global.css';
 			margin-bottom: 24px;
 		}
 
-		/* == SOCIAL LINK — each row in the Connect section.
-		   flex lines up icon, text, and arrow horizontally. == */
+		/* == SOCIAL LINK == */
 		.social-link {
 			display: flex;
 			align-items: center;
@@ -169,212 +140,267 @@ import '../styles/global.css';
 			background: #161b22;
 			border: 2px solid #21262d;
 			border-radius: 12px;
-			text-decoration: none; /* removes default underline */
+			text-decoration: none;
 			color: #c9d1d9;
 			transition: all 0.2s;
 		}
-		/* Lifts card 2px and adds blue glow on hover */
 		.social-link:hover {
 			border-color: #388bfd60;
 			background: #1c2128;
 			transform: translateY(-2px);
 			box-shadow: 0 6px 20px rgba(56,139,253,0.08);
 		}
-		/* Square icon container on the left of each social link */
 		.social-icon {
-			width: 40px;
-			height: 40px;
+			width: 40px; height: 40px;
 			border-radius: 10px;
+			display: flex; align-items: center; justify-content: center;
+			flex-shrink: 0;
+		}
+
+		/* ============================================================
+		   NAVBAR
+		   ============================================================ */
+		nav {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 0 32px;
+			height: 58px;
+			background: #0d1117;
+			border-bottom: 1px solid #21262d;
+			position: sticky;
+			top: 0;
+			z-index: 200;
+		}
+
+		/* == HAMBURGER BUTTON — 3 horizontal lines == */
+		.hamburger {
+			background: none;
+			border: 1px solid #30363d;
+			border-radius: 8px;
+			padding: 8px 10px;
+			cursor: pointer;
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
+			transition: border-color 0.2s;
+		}
+		.hamburger:hover { border-color: #388bfd80; }
+		.hamburger span {
+			display: block;
+			width: 20px;
+			height: 2px;
+			background: #c9d1d9;
+			border-radius: 2px;
+			transition: all 0.25s ease;
+		}
+		/* Animate into X when open */
+		.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+		.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+		.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+		/* == DROPDOWN MENU == */
+		.nav-menu {
+			display: none;
+			position: absolute;
+			top: 66px;
+			right: 24px;
+			background: #161b22;
+			border: 1px solid #30363d;
+			border-radius: 12px;
+			padding: 8px;
+			min-width: 210px;
+			box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+			z-index: 300;
+		}
+		.nav-menu.open { display: block; }
+
+		.nav-menu a {
 			display: flex;
 			align-items: center;
-			justify-content: center;
-			flex-shrink: 0; /* prevents shrinking in tight spaces */
+			gap: 12px;
+			padding: 10px 14px;
+			color: #c9d1d9;
+			text-decoration: none;
+			border-radius: 8px;
+			font-size: 0.88rem;
+			font-weight: 700;
+			font-family: Arial, sans-serif;
+			transition: background 0.15s;
 		}
+		.nav-menu a:hover { background: #1c2128; color: #e6edf3; }
+		.nav-icon { width: 22px; text-align: center; font-style: normal; }
+
+		/* ============================================================
+		   SECTION FLASH — faint white border glow when nav link is clicked
+		   ============================================================ */
+		@keyframes sectionFlash {
+			0%   { box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
+			20%  { box-shadow: 0 0 0 3px rgba(255,255,255,0.28),
+			                   0 4px 32px rgba(56,139,253,0.3); }
+			100% { box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
+		}
+		.flash { animation: sectionFlash 0.85s ease forwards; }
 	</style>
 </head>
 
 <body>
 
-	<!-- == NAVBAR — sticky, stays at top while scrolling == -->
-	<nav style="
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 0 32px;
-		height: 58px;
-		background: #0d1117;
-		border-bottom: 1px solid #21262d;
-		position: sticky;
-		top: 0;
-		z-index: 100;
-	">
-		<!-- Name and email stacked vertically -->
-		<div style="display: flex; flex-direction: column; gap: 2px;">
-			<span style="font-size: 1rem; font-weight: 600; color: #e6edf3;">Michael Flaugher</span>
-			<span style="font-size: 0.75rem; color: #8b949e;">flaugher111413@gmail.com</span>
+	<!-- == NAVBAR == -->
+	<nav>
+		<div style="display:flex;flex-direction:column;gap:2px;">
+			<span style="font-size:1rem;font-weight:900;color:#e6edf3;font-family:'Arial Black',Arial,sans-serif;">Michael Flaugher</span>
+			<span style="font-size:0.75rem;color:#8b949e;">flaugher111413@gmail.com</span>
+		</div>
+
+		<!-- 3-line hamburger — top-right corner -->
+		<button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Open navigation menu">
+			<span></span>
+			<span></span>
+			<span></span>
+		</button>
+
+		<!-- Dropdown: one link per section -->
+		<div class="nav-menu" id="nav-menu">
+			<a href="#about"       onclick="navTo('about')">      <i class="nav-icon">👤</i> About</a>
+			<a href="#credentials" onclick="navTo('credentials')"><i class="nav-icon">🏅</i> Certifications</a>
+			<a href="#education"   onclick="navTo('education')">  <i class="nav-icon">🎓</i> Education</a>
+			<a href="#experience"  onclick="navTo('experience')"> <i class="nav-icon">🎖️</i> Experience</a>
+			<a href="#connect"     onclick="navTo('connect')">    <i class="nav-icon">🔗</i> Connect</a>
 		</div>
 	</nav>
 
-	<!-- == HERO — first thing visitors see == -->
-	<section id="about" style="
-		padding: 80px 24px;
-		text-align: center;
-		max-width: 640px;
-		margin: 0 auto;
-	">
-		<!-- Photo placeholder — replace this <div> with an <img> when ready:
-		     <img src="/your-photo.jpg" alt="Michael Flaugher"
-		          style="width:120px; height:120px; border-radius:50%; margin: 0 auto 24px;" />
-		     border-radius: 50% turns any square into a circle. -->
+	<!-- == HERO == -->
+	<section id="about" style="padding:80px 24px;text-align:center;max-width:640px;margin:0 auto;">
 		<div style="
-			width: 120px;
-			height: 120px;
-			border-radius: 50%;
-			background: linear-gradient(135deg, #1c2128, #1f3a5f);
-			border: 2px solid #30363d;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: 2.8rem;
-			margin: 0 auto 24px;
-			box-shadow: 0 0 0 6px #161b22, 0 16px 32px rgba(0,0,0,0.4);
+			width:120px;height:120px;border-radius:50%;
+			background:linear-gradient(135deg,#1c2128,#1f3a5f);
+			border:2px solid #30363d;
+			display:flex;align-items:center;justify-content:center;
+			font-size:2.8rem;margin:0 auto 24px;
+			box-shadow:0 0 0 6px #161b22,0 16px 32px rgba(0,0,0,0.4);
 		">👤</div>
 
-		<!-- Uppercase role label above name -->
-		<p style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.14em; color: #58a6ff; margin-bottom: 12px; font-weight: 500;">IT Specialist & Veteran</p>
-
-		<!-- h1 = most important heading on the page -->
-		<h1 style="font-size: 2.6rem; font-weight: 700; color: #e6edf3; line-height: 1.1; margin-bottom: 16px;">Michael Flaugher</h1>
-
-		<!-- Bio — line-height: 1.8 adds breathing room between lines -->
-		<p style="font-size: 1rem; line-height: 1.8; color: #8b949e; max-width: 480px; margin: 0 auto 32px;">
+		<p style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.14em;color:#58a6ff;margin-bottom:12px;font-weight:700;">IT Specialist & Veteran</p>
+		<h1 style="font-size:2.6rem;font-weight:900;color:#e6edf3;line-height:1.1;margin-bottom:16px;">Michael Flaugher</h1>
+		<p style="font-size:1rem;line-height:1.8;color:#8b949e;max-width:480px;margin:0 auto 32px;">
 			Welcome to my web portfolio! I am an Information Technology Specialist
 			with a concentration in cybersecurity, programming, and web-building.
 		</p>
 	</section>
 
-	<!-- == CREDENTIALS SECTION == -->
-	<section id="credentials" style="max-width: 640px; margin: 0 auto; padding: 0 24px 32px;">
-		<div class="card" style="padding: 32px;">
+	<!-- == CERTIFICATIONS == -->
+	<section id="credentials" style="max-width:640px;margin:0 auto;padding:0 24px 32px;">
+		<div class="card" style="padding:32px;">
 			<p class="section-title">Certifications</p>
 			<div class="divider"></div>
-
-			<!-- grid-template-columns: repeat(3, 1fr) = 3 equal columns.
-			     Change the number to adjust columns: repeat(2, 1fr) = 2 cols, etc. -->
 			<div class="badge-grid">
 
-				<!-- -- CSAP -- -->
-				<!-- Badge: onclick opens the matching modal by its id -->
-				<span class="badge" onclick="document.getElementById('modal-csap').style.display='flex'" style="cursor: pointer;">
-					<img src="/CSAP.png" alt="CSAP" />
-					CSAP
+				<!-- CSAP -->
+				<span class="badge" onclick="document.getElementById('modal-csap').style.display='flex'">
+					<img src="/CSAP.png" alt="CSAP" />CSAP
 				</span>
-				<!-- Modal: clicking outside the box (the overlay) also closes it -->
 				<div id="modal-csap" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
 					<div class="modal-box">
 						<button class="modal-close" onclick="document.getElementById('modal-csap').style.display='none'">✕</button>
-						<div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+						<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
 							<img src="/CSAP.png" alt="CSAP" width="56" height="56" />
 							<div>
-								<h3 style="color: #e6edf3; font-size: 1.1rem;">CompTIA CSAP</h3>
-								<p style="color: #58a6ff; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em;">Security Analytics Professional</p>
+								<h3 style="color:#e6edf3;font-size:1.1rem;">CompTIA CSAP</h3>
+								<p style="color:#58a6ff;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;">Security Analytics Professional</p>
 							</div>
 						</div>
-						<p style="color: #8b949e; font-size: 0.88rem; line-height: 1.7; margin-bottom: 24px;">
+						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">
 							The CSAP stackable certification is earned by holding both CySA+ and Security+, demonstrating advanced security analytics and operations expertise.
 						</p>
-						<div style="display: flex; gap: 10px;">
-							<a href="/CSAP_Cert.pdf" target="_blank" class="modal-btn" style="background: #388bfd; color: white;">View Certificate</a>
-							<a href="https://www.comptia.org/certifications/which-certification/stackable-certifications" target="_blank" class="modal-btn" style="border: 1px solid #30363d; color: #c9d1d9;">Learn More</a>
+						<div style="display:flex;gap:10px;">
+							<a href="/CSAP_Cert.pdf" target="_blank" class="modal-btn" style="background:#388bfd;color:white;">View Certificate</a>
+							<a href="https://www.comptia.org/certifications/which-certification/stackable-certifications" target="_blank" class="modal-btn" style="border:1px solid #30363d;color:#c9d1d9;">Learn More</a>
 						</div>
 					</div>
 				</div>
 
-				<!-- -- CySA+ -- -->
-				<span class="badge" onclick="document.getElementById('modal-cysa').style.display='flex'" style="cursor: pointer;">
-					<img src="/CySA+.png" alt="CySA+" />
-					CySA+
+				<!-- CySA+ -->
+				<span class="badge" onclick="document.getElementById('modal-cysa').style.display='flex'">
+					<img src="/CySA+.png" alt="CySA+" />CySA+
 				</span>
 				<div id="modal-cysa" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
 					<div class="modal-box">
 						<button class="modal-close" onclick="document.getElementById('modal-cysa').style.display='none'">✕</button>
-						<div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+						<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
 							<img src="/CySA+.png" alt="CySA+" width="56" height="56" />
 							<div>
-								<h3 style="color: #e6edf3; font-size: 1.1rem;">CompTIA CySA+</h3>
-								<p style="color: #58a6ff; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em;">Cybersecurity Analyst</p>
+								<h3 style="color:#e6edf3;font-size:1.1rem;">CompTIA CySA+</h3>
+								<p style="color:#58a6ff;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;">Cybersecurity Analyst</p>
 							</div>
 						</div>
-						<p style="color: #8b949e; font-size: 0.88rem; line-height: 1.7; margin-bottom: 24px;">
+						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">
 							The CySA+ certifies the ability to detect, analyze, and respond to cybersecurity threats using behavioral analytics tools and techniques.
 						</p>
-						<div style="display: flex; gap: 10px;">
-							<a href="/CySA+_Cert.pdf" target="_blank" class="modal-btn" style="background: #388bfd; color: white;">View Certificate</a>
-							<a href="https://www.comptia.org/certifications/cybersecurity-analyst" target="_blank" class="modal-btn" style="border: 1px solid #30363d; color: #c9d1d9;">Learn More</a>
+						<div style="display:flex;gap:10px;">
+							<a href="/CySA+_Cert.pdf" target="_blank" class="modal-btn" style="background:#388bfd;color:white;">View Certificate</a>
+							<a href="https://www.comptia.org/certifications/cybersecurity-analyst" target="_blank" class="modal-btn" style="border:1px solid #30363d;color:#c9d1d9;">Learn More</a>
 						</div>
 					</div>
 				</div>
 
-				<!-- -- Security+ -- -->
-				<span class="badge" onclick="document.getElementById('modal-secplus').style.display='flex'" style="cursor: pointer;">
-					<img src="/Security+.png" alt="Security+" />
-					Security+
+				<!-- Security+ -->
+				<span class="badge" onclick="document.getElementById('modal-secplus').style.display='flex'">
+					<img src="/Security+.png" alt="Security+" />Security+
 				</span>
 				<div id="modal-secplus" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
 					<div class="modal-box">
 						<button class="modal-close" onclick="document.getElementById('modal-secplus').style.display='none'">✕</button>
-						<div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+						<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
 							<img src="/Security+.png" alt="Security+" width="56" height="56" />
 							<div>
-								<h3 style="color: #e6edf3; font-size: 1.1rem;">CompTIA Security+</h3>
-								<p style="color: #58a6ff; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em;">Security Fundamentals</p>
+								<h3 style="color:#e6edf3;font-size:1.1rem;">CompTIA Security+</h3>
+								<p style="color:#58a6ff;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;">Security Fundamentals</p>
 							</div>
 						</div>
-						<p style="color: #8b949e; font-size: 0.88rem; line-height: 1.7; margin-bottom: 24px;">
+						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">
 							Security+ is the industry standard for validating baseline cybersecurity skills covering threats, vulnerabilities, architecture, and incident response.
 						</p>
-						<div style="display: flex; gap: 10px;">
-							<a href="/Sec+_Cert.pdf" target="_blank" class="modal-btn" style="background: #388bfd; color: white;">View Certificate</a>
-							<a href="https://www.comptia.org/certifications/security" target="_blank" class="modal-btn" style="border: 1px solid #30363d; color: #c9d1d9;">Learn More</a>
+						<div style="display:flex;gap:10px;">
+							<a href="/Sec+_Cert.pdf" target="_blank" class="modal-btn" style="background:#388bfd;color:white;">View Certificate</a>
+							<a href="https://www.comptia.org/certifications/security" target="_blank" class="modal-btn" style="border:1px solid #30363d;color:#c9d1d9;">Learn More</a>
 						</div>
 					</div>
 				</div>
 
-				<!-- -- ITF+ -- -->
-				<span class="badge" onclick="document.getElementById('modal-itf').style.display='flex'" style="cursor: pointer;">
-					<img src="/ITF+.png" alt="ITF+" />
-					ITF+
+				<!-- ITF+ -->
+				<span class="badge" onclick="document.getElementById('modal-itf').style.display='flex'">
+					<img src="/ITF+.png" alt="ITF+" />ITF+
 				</span>
 				<div id="modal-itf" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
 					<div class="modal-box">
 						<button class="modal-close" onclick="document.getElementById('modal-itf').style.display='none'">✕</button>
-						<div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+						<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
 							<img src="/ITF+.png" alt="ITF+" width="56" height="56" />
 							<div>
-								<h3 style="color: #e6edf3; font-size: 1.1rem;">CompTIA ITF+</h3>
-								<p style="color: #58a6ff; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em;">IT Fundamentals</p>
+								<h3 style="color:#e6edf3;font-size:1.1rem;">CompTIA ITF+</h3>
+								<p style="color:#58a6ff;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;">IT Fundamentals</p>
 							</div>
 						</div>
-						<p style="color: #8b949e; font-size: 0.88rem; line-height: 1.7; margin-bottom: 24px;">
+						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">
 							ITF+, now Tech+, establishes a foundation of core IT knowledge covering hardware, software, networking, databases, and security concepts.
 						</p>
-						<div style="display: flex; gap: 10px;">
-							<a href="/ITF+_Cert.pdf" target="_blank" class="modal-btn" style="background: #388bfd; color: white;">View Certificate</a>
-							<a href="https://www.comptia.org/certifications/it-fundamentals" target="_blank" class="modal-btn" style="border: 1px solid #30363d; color: #c9d1d9;">Learn More</a>
+						<div style="display:flex;gap:10px;">
+							<a href="/ITF+_Cert.pdf" target="_blank" class="modal-btn" style="background:#388bfd;color:white;">View Certificate</a>
+							<a href="https://www.comptia.org/certifications/it-fundamentals" target="_blank" class="modal-btn" style="border:1px solid #30363d;color:#c9d1d9;">Learn More</a>
 						</div>
 					</div>
 				</div>
 
 				<!-- TODO: Uncomment when graduated
-				<span class="badge" onclick="document.getElementById('modal-amu').style.display='flex'" style="cursor: pointer;">
-					<img src="/AMU.png" alt="AMU" />
-					BS in IT
+				<span class="badge" onclick="document.getElementById('modal-amu').style.display='flex'">
+					<img src="/AMU.png" alt="AMU" />BS in IT
 				</span>
 				<div id="modal-amu" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
 					<div class="modal-box">
 						<button class="modal-close" onclick="document.getElementById('modal-amu').style.display='none'">✕</button>
-						<h3 style="color: #e6edf3;">American Military University</h3>
-						<p style="color: #8b949e;">Bachelor of Science in Information Technology</p>
+						<h3 style="color:#e6edf3;">American Military University</h3>
+						<p style="color:#8b949e;">Bachelor of Science in Information Technology</p>
 					</div>
 				</div>
 				-->
@@ -383,131 +409,170 @@ import '../styles/global.css';
 		</div>
 	</section>
 
-	<!-- == EDUCATION & EXPERIENCE SECTION == -->
-	<section id="education" style="max-width: 640px; margin: 0 auto; padding: 0 24px 32px;">
-		<div class="card" style="padding: 32px;">
-			<p class="section-title">Education & Experience</p>
+	<!-- == EDUCATION — its own section == -->
+	<section id="education" style="max-width:640px;margin:0 auto;padding:0 24px 32px;">
+		<div class="card" style="padding:32px;">
+			<p class="section-title">Education</p>
 			<div class="divider"></div>
-
 			<div class="badge-grid">
 
-				<!-- -- SoloLearn C++ -- -->
-				<span class="badge" onclick="document.getElementById('modal-sololearn').style.display='flex'" style="cursor: pointer;">
-					<img src="/Sololearn_Logo.png" alt="SoloLearn" />
-					SoloLearn C++
+				<!-- SoloLearn C++ -->
+				<span class="badge" onclick="document.getElementById('modal-sololearn').style.display='flex'">
+					<img src="/Sololearn_Logo.png" alt="SoloLearn" />SoloLearn C++
 				</span>
 				<div id="modal-sololearn" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
 					<div class="modal-box">
 						<button class="modal-close" onclick="document.getElementById('modal-sololearn').style.display='none'">✕</button>
-						<div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+						<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
 							<img src="/Sololearn_Logo.png" alt="SoloLearn" width="56" height="56" />
 							<div>
-								<h3 style="color: #e6edf3; font-size: 1.1rem;">SoloLearn C++</h3>
-								<p style="color: #58a6ff; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em;">Programming Certificate</p>
+								<h3 style="color:#e6edf3;font-size:1.1rem;">SoloLearn C++</h3>
+								<p style="color:#58a6ff;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;">Programming Certificate</p>
 							</div>
 						</div>
-						<p style="color: #8b949e; font-size: 0.88rem; line-height: 1.7; margin-bottom: 24px;">
+						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">
 							Completed SoloLearn's C++ course, covering core programming concepts including variables, loops, functions, object-oriented programming, and memory management.
 						</p>
-						<div style="display: flex; gap: 10px;">
-							<a href="/SoloLearn_Cpp.pdf" target="_blank" class="modal-btn" style="background: #388bfd; color: white;">View Certificate</a>
-							<a href="https://www.sololearn.com" target="_blank" class="modal-btn" style="border: 1px solid #30363d; color: #c9d1d9;">Learn More</a>
+						<div style="display:flex;gap:10px;">
+							<a href="/SoloLearn_Cpp.pdf" target="_blank" class="modal-btn" style="background:#388bfd;color:white;">View Certificate</a>
+							<a href="https://www.sololearn.com" target="_blank" class="modal-btn" style="border:1px solid #30363d;color:#c9d1d9;">Learn More</a>
 						</div>
 					</div>
 				</div>
 
-				<!-- -- Onward to Opportunity (O2O) -- -->
-				<span class="badge" onclick="document.getElementById('modal-o2o').style.display='flex'" style="cursor: pointer;">
-					<img src="/Syracuse_Logo.png" alt="O2O" />
-					Onward to Opportunity
+				<!-- Onward to Opportunity -->
+				<span class="badge" onclick="document.getElementById('modal-o2o').style.display='flex'">
+					<img src="/Syracuse_Logo.png" alt="O2O" />Onward to Opportunity
 				</span>
 				<div id="modal-o2o" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
 					<div class="modal-box">
 						<button class="modal-close" onclick="document.getElementById('modal-o2o').style.display='none'">✕</button>
-						<div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+						<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
 							<img src="/Syracuse_Logo.png" alt="O2O" width="56" height="56" />
 							<div>
-								<h3 style="color: #e6edf3; font-size: 1.1rem;">Onward to Opportunity</h3>
-								<p style="color: #58a6ff; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em;">Syracuse University · IVMF</p>
+								<h3 style="color:#e6edf3;font-size:1.1rem;">Onward to Opportunity</h3>
+								<p style="color:#58a6ff;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;">Syracuse University · IVMF</p>
 							</div>
 						</div>
-						<p style="color: #8b949e; font-size: 0.88rem; line-height: 1.7; margin-bottom: 24px;">
+						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">
 							Syracuse University's Onward to Opportunity (O2O) is a no-cost career skills program connecting transitioning service members to high-demand careers in IT, business, and more.
 						</p>
-						<div style="display: flex; gap: 10px;">
-							<a href="/O2O_Cert.pdf" target="_blank" class="modal-btn" style="background: #388bfd; color: white;">View Certificate</a>
-							<a href="https://ivmf.syracuse.edu/programs/career-training/" target="_blank" class="modal-btn" style="border: 1px solid #30363d; color: #c9d1d9;">Learn More</a>
+						<div style="display:flex;gap:10px;">
+							<a href="/O2O_Cert.pdf" target="_blank" class="modal-btn" style="background:#388bfd;color:white;">View Certificate</a>
+							<a href="https://ivmf.syracuse.edu/programs/career-training/" target="_blank" class="modal-btn" style="border:1px solid #30363d;color:#c9d1d9;">Learn More</a>
 						</div>
 					</div>
 				</div>
 
-				<!-- TODO: Add Veteran badge here when photos/awards are ready -->
-
 			</div>
 		</div>
 	</section>
 
-	<!-- == CONNECT SECTION — target="_blank" opens each link in a new tab == -->
-	<section id="connect" style="max-width: 640px; margin: 0 auto; padding: 0 24px 80px;">
-		<div class="card" style="padding: 32px;">
+	<!-- == EXPERIENCE — its own section, ready for veteran content == -->
+	<section id="experience" style="max-width:640px;margin:0 auto;padding:0 24px 32px;">
+		<div class="card" style="padding:32px;">
+			<p class="section-title">Experience</p>
+			<div class="divider"></div>
+			<div class="badge-grid">
+				<!-- TODO: Add Veteran badge, awards, and service highlights here -->
+				<div style="grid-column:1/-1;padding:20px 0;text-align:center;color:#484f58;font-size:0.85rem;">
+					Awards, service records, and highlights coming soon.
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- == CONNECT == -->
+	<section id="connect" style="max-width:640px;margin:0 auto;padding:0 24px 80px;">
+		<div class="card" style="padding:32px;">
 			<p class="section-title">Connect With Me</p>
 			<div class="divider"></div>
+			<div style="display:flex;flex-direction:column;gap:12px;">
 
-			<!-- flex-direction: column stacks links vertically -->
-			<div style="display: flex; flex-direction: column; gap: 12px;">
-
-				<!-- -- GitHub -- -->
-				<!-- SVG = code-drawn icon, never blurry at any size -->
 				<a href="https://github.com/Michael-Flaugher" target="_blank" class="social-link">
-					<div class="social-icon" style="background: #1c2128; border: 1px solid #30363d;">
-    					<img src="/GitHub_Logo.png" alt="GitHub" width="24" height="24" />
+					<div class="social-icon" style="background:#1c2128;border:1px solid #30363d;">
+						<img src="/GitHub_Logo.png" alt="GitHub" width="24" height="24" />
 					</div>
 					<div>
-						<div style="font-weight: 600; font-size: 0.92rem; color: #e6edf3;">GitHub</div>
-						<div style="font-size: 0.8rem; color: #8b949e;">github.com/Michael-Flaugher</div>
+						<div style="font-weight:700;font-size:0.92rem;color:#e6edf3;">GitHub</div>
+						<div style="font-size:0.8rem;color:#8b949e;">github.com/Michael-Flaugher</div>
 					</div>
-					<!-- Decorative arrow on the right -->
-					<svg style="margin-left: auto; color: #30363d;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+					<svg style="margin-left:auto;color:#30363d;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
 				</a>
 
-				<!-- -- LinkedIn -- -->
 				<a href="https://www.linkedin.com/in/michael-flaugher111413" target="_blank" class="social-link">
-					<div class="social-icon" style="background: #0a66c2; border: 1px solid #0a66c260;">
-    					<img src="/LinkedIn_Logo.png" alt="LinkedIn" width="24" height="24" />
+					<div class="social-icon" style="background:#0a66c2;border:1px solid #0a66c260;">
+						<img src="/LinkedIn_Logo.png" alt="LinkedIn" width="24" height="24" />
 					</div>
 					<div>
-						<div style="font-weight: 600; font-size: 0.92rem; color: #e6edf3;">LinkedIn</div>
-						<div style="font-size: 0.8rem; color: #8b949e;">linkedin.com/in/michael-flaugher111413</div>
+						<div style="font-weight:700;font-size:0.92rem;color:#e6edf3;">LinkedIn</div>
+						<div style="font-size:0.8rem;color:#8b949e;">linkedin.com/in/michael-flaugher111413</div>
 					</div>
-					<svg style="margin-left: auto; color: #30363d;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+					<svg style="margin-left:auto;color:#30363d;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
 				</a>
 
-				<!-- -- Gmail — opens directly in browser, no Outlook popup -- -->
 				<a href="https://mail.google.com/mail/?view=cm&to=flaugher111413@gmail.com" target="_blank" class="social-link">
-					<div class="social-icon" style="background: white; border: 1px solid #e0e0e0;">
+					<div class="social-icon" style="background:white;border:1px solid #e0e0e0;">
 						<img src="/Gmail_Logo.png" alt="Gmail" width="24" height="24" />
 					</div>
 					<div>
-						<div style="font-weight: 600; font-size: 0.92rem; color: #e6edf3;">Gmail</div>
-						<div style="font-size: 0.8rem; color: #8b949e;">flaugher111413@gmail.com</div>
+						<div style="font-weight:700;font-size:0.92rem;color:#e6edf3;">Gmail</div>
+						<div style="font-size:0.8rem;color:#8b949e;">flaugher111413@gmail.com</div>
 					</div>
-					<svg style="margin-left: auto; color: #30363d;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+					<svg style="margin-left:auto;color:#30363d;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
 				</a>
 
 			</div>
 		</div>
 	</section>
 
-	<!-- == FOOTER — border-top separates it from content above == -->
-	<footer style="
-		border-top: 1px solid #21262d;
-		text-align: center;
-		padding: 24px;
-		font-size: 0.8rem;
-		color: #484f58;
-	">
+	<!-- == FOOTER == -->
+	<footer style="border-top:1px solid #21262d;text-align:center;padding:24px;font-size:0.8rem;color:#484f58;">
 		© 2026 Michael Flaugher · Built with Astro
 	</footer>
+
+	<script is:inline>
+
+		// == HAMBURGER — toggle menu open/closed ==
+		function toggleMenu() {
+			document.getElementById('hamburger').classList.toggle('open');
+			document.getElementById('nav-menu').classList.toggle('open');
+		}
+
+		// Close menu when clicking anywhere outside it
+		document.addEventListener('click', function(e) {
+			const btn  = document.getElementById('hamburger');
+			const menu = document.getElementById('nav-menu');
+			if (!btn.contains(e.target) && !menu.contains(e.target)) {
+				btn.classList.remove('open');
+				menu.classList.remove('open');
+			}
+		});
+
+		// == navTo — close menu, scroll section to viewport center, flash card ==
+		function navTo(sectionId) {
+			// Close the dropdown first
+			document.getElementById('hamburger').classList.remove('open');
+			document.getElementById('nav-menu').classList.remove('open');
+
+			const section = document.getElementById(sectionId);
+			if (!section) return;
+
+			// block:'center' puts the section in the middle of the screen
+			section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+			// Short delay so scroll is underway before the flash fires
+			setTimeout(function() {
+				const card = section.querySelector('.card');
+				if (!card) return;
+				// Remove class, force reflow, re-add — so it replays if clicked again
+				card.classList.remove('flash');
+				void card.offsetWidth;
+				card.classList.add('flash');
+			}, 420);
+		}
+
+	</script>
 
 </body>
 </html>
