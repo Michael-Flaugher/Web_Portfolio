@@ -452,10 +452,9 @@
 			const section = document.getElementById(sectionId);
 			if (!section) return;
 
-			// Target the outer wrapper so padding is included in measurement
-			const target     = section;
-			const cardTop    = target.getBoundingClientRect().top + window.pageYOffset;
-			const cardHeight = target.offsetHeight;
+			const card = section.querySelector('.card') || section;
+			const cardTop    = card.getBoundingClientRect().top + window.pageYOffset;
+			const cardHeight = card.offsetHeight;
 			const scrollTo   = cardTop - (window.innerHeight / 2) + (cardHeight / 2);
 
 			const startY    = window.pageYOffset;
@@ -471,10 +470,7 @@
 				if (t < 1) requestAnimationFrame(scrollStep);
 			})(performance.now());
 
-			// Flash the inner card
 			setTimeout(function() {
-				const card = section.querySelector('.card');
-				if (!card) return;
 				card.classList.remove('flash');
 				void card.offsetWidth;
 				card.classList.add('flash');
