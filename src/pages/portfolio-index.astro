@@ -18,9 +18,9 @@ import '../styles/global.css';
 		/* == RESET == */
 		* { margin: 0; padding: 0; box-sizing: border-box; }
 
-		/* Slower smooth scroll — more elegant feel */
-		html { scroll-behavior: auto; } /* JS controls scroll, this just ensures no conflict */
+		html { scroll-behavior: auto; }
 		* { scroll-behavior: auto; }
+
 		body {
 			font-family: Arial, Helvetica, sans-serif;
 			background-color: #0d1117;
@@ -66,7 +66,7 @@ import '../styles/global.css';
 			text-align: center;
 			cursor: pointer;
 		}
-		.badge img { width: 64px; height: 64px; }
+		.badge img { width: 64px; height: 64px; object-fit: contain; }
 		.badge:hover { border-color: #388bfd60; color: #c9d1d9; background: #1f2937; }
 
 		/* == MODAL == */
@@ -157,7 +157,8 @@ import '../styles/global.css';
 			align-items: center;
 			padding: 0 32px;
 			height: 58px;
-			background: #0d1117;
+			background: rgba(13,17,23,0.92);
+			backdrop-filter: blur(8px);
 			border-bottom: 1px solid #21262d;
 			position: sticky;
 			top: 0;
@@ -204,8 +205,6 @@ import '../styles/global.css';
 			z-index: 300;
 		}
 		.nav-menu.open { display: block; }
-
-		/* No href on these — JS handles all navigation */
 		.nav-menu a {
 			display: flex;
 			align-items: center;
@@ -223,7 +222,25 @@ import '../styles/global.css';
 		.nav-menu a:hover { background: #1c2128; color: #e6edf3; }
 		.nav-icon { width: 22px; text-align: center; font-style: normal; }
 
-		/* == SECTION FLASH — softened, stretched out for elegant feel == */
+		/* == FLAG HERO HEADER == */
+		.hero-header {
+			position: relative;
+			background-image: url('/American_Flag.jpg');
+			background-size: cover;
+			background-position: center;
+			padding: 80px 24px;
+			text-align: center;
+		}
+		/* Dark overlay so text stays readable */
+		.hero-header::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: rgba(13,17,23,0.72);
+		}
+		.hero-header > * { position: relative; z-index: 1; }
+
+		/* == SECTION FLASH == */
 		@keyframes sectionFlash {
 			0%   { box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
 			20%  { box-shadow: 0 0 0 2px rgba(255,255,255,0.12), 0 4px 28px rgba(56,139,253,0.18); }
@@ -246,7 +263,6 @@ import '../styles/global.css';
 			<span></span><span></span><span></span>
 		</button>
 
-		<!-- No href attributes — prevents browser anchor jump fighting our scroll -->
 		<div class="nav-menu" id="nav-menu">
 			<a onclick="navTo('about')">      <i class="nav-icon">👤</i> About</a>
 			<a onclick="navTo('credentials')"><i class="nav-icon">🏅</i> Certifications</a>
@@ -256,26 +272,28 @@ import '../styles/global.css';
 		</div>
 	</nav>
 
-	<!-- == HERO == -->
-	<section id="about" style="padding:80px 24px;text-align:center;max-width:640px;margin:0 auto;">
-		<div style="
-			width:120px;height:120px;border-radius:50%;
-			background:linear-gradient(135deg,#1c2128,#1f3a5f);
-			border:2px solid #30363d;
-			display:flex;align-items:center;justify-content:center;
-			font-size:2.8rem;margin:0 auto 24px;
-			box-shadow:0 0 0 6px #161b22,0 16px 32px rgba(0,0,0,0.4);
-		">👤</div>
-		<p style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.14em;color:#58a6ff;margin-bottom:12px;font-weight:700;">IT Specialist & Veteran</p>
-		<h1 style="font-size:2.6rem;font-weight:900;color:#e6edf3;line-height:1.1;margin-bottom:16px;">Michael Flaugher</h1>
-		<p style="font-size:1rem;line-height:1.8;color:#8b949e;max-width:480px;margin:0 auto 32px;">
-			Welcome to my web portfolio! I am an Information Technology Specialist
-			with a concentration in cybersecurity, programming, and web-building.
-		</p>
+	<!-- == HERO — flag background == -->
+	<section id="about">
+		<div class="hero-header">
+			<div style="
+				width:120px;height:120px;border-radius:50%;
+				background:linear-gradient(135deg,#1c2128,#1f3a5f);
+				border:2px solid #30363d;
+				display:flex;align-items:center;justify-content:center;
+				font-size:2.8rem;margin:0 auto 24px;
+				box-shadow:0 0 0 6px rgba(22,27,34,0.8),0 16px 32px rgba(0,0,0,0.4);
+			">👤</div>
+			<p style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.14em;color:#58a6ff;margin-bottom:12px;font-weight:700;">IT Specialist & Veteran</p>
+			<h1 style="font-size:2.6rem;font-weight:900;color:#e6edf3;line-height:1.1;margin-bottom:16px;">Michael Flaugher</h1>
+			<p style="font-size:1rem;line-height:1.8;color:#c9d1d9;max-width:480px;margin:0 auto;">
+				Welcome to my web portfolio! I am an Information Technology Specialist
+				with a concentration in cybersecurity, programming, and web-building.
+			</p>
+		</div>
 	</section>
 
 	<!-- == CERTIFICATIONS == -->
-	<section id="credentials" style="max-width:640px;margin:0 auto;padding:0 24px 32px;">
+	<section id="credentials" style="max-width:640px;margin:0 auto;padding:32px 24px 32px;">
 		<div class="card" style="padding:32px;">
 			<p class="section-title">Certifications</p>
 			<div class="divider"></div>
@@ -369,24 +387,7 @@ import '../styles/global.css';
 					</div>
 				</div>
 
-				<!-- TODO: Uncomment when graduated
-				<span class="badge" onclick="document.getElementById('modal-amu').style.display='flex'">
-					<img src="/AMU.png" alt="AMU" />BS in IT
-				</span>
-				-->
-
-			</div>
-		</div>
-	</section>
-
-	<!-- == EDUCATION == -->
-	<section id="education" style="max-width:640px;margin:0 auto;padding:0 24px 32px;">
-		<div class="card" style="padding:32px;">
-			<p class="section-title">Education</p>
-			<div class="divider"></div>
-			<div class="badge-grid">
-
-				<!-- SoloLearn C++ -->
+				<!-- SoloLearn C++ — moved here from Education -->
 				<span class="badge" onclick="document.getElementById('modal-sololearn').style.display='flex'">
 					<img src="/Sololearn_Logo.png" alt="SoloLearn" />SoloLearn C++
 				</span>
@@ -404,6 +405,38 @@ import '../styles/global.css';
 						<div style="display:flex;gap:10px;">
 							<a href="/SoloLearn_Cpp.pdf" target="_blank" class="modal-btn" style="background:#388bfd;color:white;">View Certificate</a>
 							<a href="https://www.sololearn.com" target="_blank" class="modal-btn" style="border:1px solid #30363d;color:#c9d1d9;">Learn More</a>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</section>
+
+	<!-- == EDUCATION == -->
+	<section id="education" style="max-width:640px;margin:0 auto;padding:0 24px 32px;">
+		<div class="card" style="padding:32px;">
+			<p class="section-title">Education</p>
+			<div class="divider"></div>
+			<div class="badge-grid">
+
+				<!-- AMU — BS in IT -->
+				<span class="badge" onclick="document.getElementById('modal-amu').style.display='flex'">
+					<img src="/AMU_Logo.png" alt="AMU" />BS in IT
+				</span>
+				<div id="modal-amu" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
+					<div class="modal-box">
+						<button class="modal-close" onclick="document.getElementById('modal-amu').style.display='none'">✕</button>
+						<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+							<img src="/AMU_Logo.png" alt="AMU" width="56" height="56" style="object-fit:contain;" />
+							<div>
+								<h3 style="color:#e6edf3;font-size:1.1rem;">American Military University</h3>
+								<p style="color:#58a6ff;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;">Bachelor of Science · Information Technology</p>
+							</div>
+						</div>
+						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">Coming June 1st, 2026!</p>
+						<div style="display:flex;gap:10px;">
+							<a href="https://www.amu.apus.edu" target="_blank" class="modal-btn" style="border:1px solid #30363d;color:#c9d1d9;">Learn More</a>
 						</div>
 					</div>
 				</div>
@@ -440,9 +473,28 @@ import '../styles/global.css';
 			<p class="section-title">Experience</p>
 			<div class="divider"></div>
 			<div class="badge-grid">
-				<div style="grid-column:1/-1;padding:20px 0;text-align:center;color:#484f58;font-size:0.85rem;">
-					Awards, service records, and highlights coming soon.
+
+				<!-- Veteran badge -->
+				<span class="badge" onclick="document.getElementById('modal-veteran').style.display='flex'">
+					<img src="/Army_Insignia.png" alt="U.S. Army" />U.S. Army Veteran
+				</span>
+				<div id="modal-veteran" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
+					<div class="modal-box">
+						<button class="modal-close" onclick="document.getElementById('modal-veteran').style.display='none'">✕</button>
+						<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+							<img src="/Army_Insignia.png" alt="U.S. Army" width="56" height="56" style="object-fit:contain;" />
+							<div>
+								<h3 style="color:#e6edf3;font-size:1.1rem;">U.S. Army Veteran</h3>
+								<p style="color:#58a6ff;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;">Service · Awards · History</p>
+							</div>
+						</div>
+						<p style="color:#8b949e;font-size:0.88rem;line-height:1.7;margin-bottom:24px;">View my full service history, awards, and records.</p>
+						<div style="display:flex;gap:10px;">
+							<a href="/history" class="modal-btn" style="background:#388bfd;color:white;">View History</a>
+						</div>
+					</div>
 				</div>
+
 			</div>
 		</div>
 	</section>
@@ -491,14 +543,13 @@ import '../styles/global.css';
 		</div>
 	</section>
 
-	<!-- == FOOTER — 60vh bottom padding gives scroll room to center any section == -->
+	<!-- == FOOTER == -->
 	<footer style="border-top:1px solid #21262d;text-align:center;padding:24px 24px 60vh;font-size:0.8rem;color:#484f58;">
 		© 2026 Michael Flaugher · Built with Astro
 	</footer>
 
 	<script is:inline>
 
-		// == HAMBURGER ==
 		function toggleMenu() {
 			document.getElementById('hamburger').classList.toggle('open');
 			document.getElementById('nav-menu').classList.toggle('open');
@@ -513,11 +564,7 @@ import '../styles/global.css';
 			}
 		});
 
-		// == navTo ==
-		// No href on the links, so no anchor jump to fight.
-		// No scroll-behavior:smooth on html, so window.scrollTo has full control.
 		function navTo(sectionId) {
-			// Close menu first
 			document.getElementById('hamburger').classList.remove('open');
 			document.getElementById('nav-menu').classList.remove('open');
 
@@ -525,15 +572,10 @@ import '../styles/global.css';
 			if (!section) return;
 
 			const card = section.querySelector('.card') || section;
-
-			// Card's distance from top of document
 			const cardTop    = card.getBoundingClientRect().top + window.pageYOffset;
 			const cardHeight = card.offsetHeight;
+			const scrollTo   = cardTop - (window.innerHeight / 2) + (cardHeight / 2);
 
-			// Scroll so card midpoint = viewport midpoint
-			const scrollTo = cardTop - (window.innerHeight / 2) + (cardHeight / 2);
-
-			// Slow elegant eased scroll — 900ms ease-in-out
 			const startY    = window.pageYOffset;
 			const distance  = Math.max(0, scrollTo) - startY;
 			const duration  = 900;
@@ -542,13 +584,11 @@ import '../styles/global.css';
 			(function scrollStep(now) {
 				const elapsed = now - startTime;
 				const t       = Math.min(elapsed / duration, 1);
-				// Ease-in-out cubic
 				const eased   = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2;
 				window.scrollTo(0, startY + distance * eased);
 				if (t < 1) requestAnimationFrame(scrollStep);
 			})(performance.now());
 
-			// Flash after scroll settles
 			setTimeout(function() {
 				card.classList.remove('flash');
 				void card.offsetWidth;
