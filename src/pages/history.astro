@@ -1,6 +1,5 @@
 ---
-// Military service history gallery
-// Accessible at /history
+// Military service history gallery — /history
 ---
 
 <html lang="en">
@@ -20,7 +19,6 @@
 			color: #c9d1d9;
 			min-height: 100vh;
 		}
-
 		h1, h2, h3 { font-family: 'Arial Black', Arial, sans-serif; }
 
 		/* == NAVBAR == */
@@ -37,7 +35,6 @@
 			top: 0;
 			z-index: 200;
 		}
-
 		.back-btn {
 			display: flex;
 			align-items: center;
@@ -56,7 +53,7 @@
 		}
 		.back-btn:hover { border-color: #388bfd80; color: #e6edf3; }
 
-		/* == FLAG HERO HEADER == */
+		/* == FLAG HERO == */
 		.hero-header {
 			position: relative;
 			background-image: url('/American_Flag.jpg');
@@ -73,68 +70,20 @@
 		}
 		.hero-header > * { position: relative; z-index: 1; }
 
-		/* == GALLERY GRID == */
-		.gallery-wrap {
+		/* == SECTION CARD == */
+		.section-card {
 			max-width: 720px;
-			margin: 0 auto;
-			padding: 40px 24px 60px;
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
-			gap: 24px;
+			margin: 32px auto 0;
+			padding: 0 24px;
 		}
-		@media (max-width: 560px) {
-			.gallery-wrap { grid-template-columns: 1fr; }
-		}
-
-		/* == GALLERY CARD == */
-		.gallery-card {
+		.card {
 			background: #161b22;
 			border: 1px solid #21262d;
 			border-radius: 14px;
-			overflow: hidden;
 			box-shadow: 0 4px 24px rgba(0,0,0,0.3);
-			transition: border-color 0.2s, transform 0.2s;
+			padding: 32px;
 		}
-		.gallery-card:hover {
-			border-color: #388bfd60;
-			transform: translateY(-2px);
-		}
-
-		.gallery-card img {
-			width: 100%;
-			aspect-ratio: 4/3;
-			object-fit: cover;
-			display: block;
-			background: #1c2128;
-		}
-
-		.gallery-card-body {
-			padding: 16px;
-		}
-
-		.gallery-card-title {
-			font-size: 0.72rem;
-			font-weight: 700;
-			text-transform: uppercase;
-			letter-spacing: 0.1em;
-			color: #58a6ff;
-			margin-bottom: 8px;
-		}
-
-		.gallery-card-caption {
-			font-size: 0.88rem;
-			line-height: 1.7;
-			color: #8b949e;
-			min-height: 40px;
-		}
-
-		/* == SECTION DIVIDER == */
-		.section-label {
-			max-width: 720px;
-			margin: 0 auto;
-			padding: 0 24px;
-		}
-		.section-label h2 {
+		.section-title {
 			font-size: 0.7rem;
 			text-transform: uppercase;
 			letter-spacing: 0.14em;
@@ -142,25 +91,129 @@
 			margin-bottom: 8px;
 			font-weight: 700;
 		}
-		.section-label .divider {
+		.divider {
 			width: 300px;
 			height: 2px;
 			background: linear-gradient(90deg, #388bfd, transparent);
 			border-radius: 2px;
-			margin-bottom: 0;
+			margin-bottom: 24px;
 		}
+
+		/* == GALLERY GRID == */
+		.gallery-grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 16px;
+		}
+		@media (max-width: 560px) {
+			.gallery-grid { grid-template-columns: 1fr; }
+		}
+
+		/* == GALLERY CARD == */
+		.gallery-card {
+			background: #1c2128;
+			border: 2px solid #30363d;
+			border-radius: 12px;
+			overflow: hidden;
+			transition: border-color 0.2s, transform 0.2s;
+			cursor: pointer;
+		}
+		.gallery-card:hover { border-color: #388bfd60; transform: translateY(-2px); }
+		.gallery-card img {
+			width: 100%;
+			aspect-ratio: 4/3;
+			object-fit: cover;
+			display: block;
+			background: #161b22;
+		}
+		.gallery-card-body { padding: 12px 14px; }
+		.gallery-card-title {
+			font-size: 0.7rem;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 0.1em;
+			color: #58a6ff;
+			margin-bottom: 4px;
+		}
+		.gallery-card-caption { font-size: 0.85rem; line-height: 1.6; color: #8b949e; }
+
+		/* == LIGHTBOX == */
+		.lightbox {
+			display: none;
+			position: fixed;
+			inset: 0;
+			background: rgba(0,0,0,0.88);
+			z-index: 999;
+			align-items: center;
+			justify-content: center;
+			padding: 24px;
+		}
+		.lightbox.open { display: flex; }
+		.lightbox-inner {
+			position: relative;
+			max-width: 860px;
+			width: 100%;
+			background: #161b22;
+			border: 1px solid #30363d;
+			border-radius: 14px;
+			overflow: hidden;
+		}
+		.lightbox-inner img {
+			width: 100%;
+			max-height: 78vh;
+			object-fit: contain;
+			display: block;
+			background: #0d1117;
+		}
+		.lightbox-footer {
+			padding: 16px 20px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+		}
+		.lightbox-title {
+			font-size: 0.75rem;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 0.1em;
+			color: #58a6ff;
+		}
+		.lightbox-close {
+			position: absolute;
+			top: 12px; right: 14px;
+			background: rgba(0,0,0,0.6);
+			border: 1px solid #30363d;
+			border-radius: 6px;
+			color: #c9d1d9;
+			font-size: 1rem;
+			width: 32px; height: 32px;
+			cursor: pointer;
+			display: flex; align-items: center; justify-content: center;
+		}
+		.lightbox-close:hover { color: #fff; border-color: #888; }
+		.lightbox-download {
+			padding: 7px 16px;
+			background: #388bfd;
+			color: white;
+			border: none;
+			border-radius: 8px;
+			font-size: 0.82rem;
+			font-weight: 700;
+			font-family: Arial, sans-serif;
+			text-decoration: none;
+		}
+		.lightbox-download:hover { background: #58a6ff; }
 	</style>
 </head>
 
 <body>
 
-	<!-- == NAVBAR == -->
 	<nav>
 		<a href="/" class="back-btn">← Back to Portfolio</a>
 		<span style="font-size:0.85rem;font-weight:700;color:#8b949e;font-family:'Arial Black',Arial,sans-serif;">Service History</span>
 	</nav>
 
-	<!-- == HERO == -->
 	<div class="hero-header">
 		<img src="/Army_Insignia.png" alt="U.S. Army" style="width:80px;height:80px;object-fit:contain;margin:0 auto 20px;display:block;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.6));" />
 		<p style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.14em;color:#58a6ff;margin-bottom:10px;font-weight:700;">U.S. Army Veteran</p>
@@ -169,117 +222,148 @@
 	</div>
 
 	<!-- == AWARDS == -->
-	<div class="section-label" style="padding-top:40px;">
-		<h2>Awards</h2>
-		<div class="divider"></div>
-	</div>
+	<div class="section-card">
+		<div class="card">
+			<p class="section-title">Awards</p>
+			<div class="divider"></div>
+			<div class="gallery-grid">
 
-	<div class="gallery-wrap" style="padding-top:24px;">
+				<div class="gallery-card" onclick="openLightbox('/ARCOM_12SEP2024.jpg','ARCOM · Sep 2024')">
+					<img src="/ARCOM_12SEP2024.jpg" alt="ARCOM Sep 2024" />
+					<div class="gallery-card-body">
+						<p class="gallery-card-title">ARCOM · Sep 2024</p>
+						<p class="gallery-card-caption"></p>
+					</div>
+				</div>
 
-		<div class="gallery-card">
-			<img src="/ARCOM_12SEP2024.jpg" alt="ARCOM September 2024" />
-			<div class="gallery-card-body">
-				<p class="gallery-card-title">ARCOM · Sep 2024</p>
-				<p class="gallery-card-caption"></p>
+				<div class="gallery-card" onclick="openLightbox('/ARCOM_24APR2024.jpg','ARCOM · Apr 2024')">
+					<img src="/ARCOM_24APR2024.jpg" alt="ARCOM Apr 2024" />
+					<div class="gallery-card-body">
+						<p class="gallery-card-title">ARCOM · Apr 2024</p>
+						<p class="gallery-card-caption"></p>
+					</div>
+				</div>
+
+				<div class="gallery-card" onclick="openLightbox('/ARCOM_29FEB2024.jpg','ARCOM · Feb 2024')">
+					<img src="/ARCOM_29FEB2024.jpg" alt="ARCOM Feb 2024" />
+					<div class="gallery-card-body">
+						<p class="gallery-card-title">ARCOM · Feb 2024</p>
+						<p class="gallery-card-caption"></p>
+					</div>
+				</div>
+
+				<div class="gallery-card" onclick="openLightbox('/AAM_07MAY2023.jpg','AAM · May 2023')">
+					<img src="/AAM_07MAY2023.jpg" alt="AAM May 2023" />
+					<div class="gallery-card-body">
+						<p class="gallery-card-title">AAM · May 2023</p>
+						<p class="gallery-card-caption"></p>
+					</div>
+				</div>
+
+				<div class="gallery-card" onclick="openLightbox('/AAM_24FEB2023.jpg','AAM · Feb 2023')">
+					<img src="/AAM_24FEB2023.jpg" alt="AAM Feb 2023" />
+					<div class="gallery-card-body">
+						<p class="gallery-card-title">AAM · Feb 2023</p>
+						<p class="gallery-card-caption"></p>
+					</div>
+				</div>
+
+				<div class="gallery-card" onclick="openLightbox('/COA_10MAR2021.jpg','Certificate of Achievement · Mar 2021')">
+					<img src="/COA_10MAR2021.jpg" alt="Certificate of Achievement" />
+					<div class="gallery-card-body">
+						<p class="gallery-card-title">Certificate of Achievement · Mar 2021</p>
+						<p class="gallery-card-caption"></p>
+					</div>
+				</div>
+
 			</div>
 		</div>
-
-		<div class="gallery-card">
-			<img src="/ARCOM_24APR2024.jpg" alt="ARCOM April 2024" />
-			<div class="gallery-card-body">
-				<p class="gallery-card-title">ARCOM · Apr 2024</p>
-				<p class="gallery-card-caption"></p>
-			</div>
-		</div>
-
-		<div class="gallery-card">
-			<img src="/ARCOM_29FEB2024.jpg" alt="ARCOM February 2024" />
-			<div class="gallery-card-body">
-				<p class="gallery-card-title">ARCOM · Feb 2024</p>
-				<p class="gallery-card-caption"></p>
-			</div>
-		</div>
-
-		<div class="gallery-card">
-			<img src="/AAM_07MAY2023.jpg" alt="AAM May 2023" />
-			<div class="gallery-card-body">
-				<p class="gallery-card-title">AAM · May 2023</p>
-				<p class="gallery-card-caption"></p>
-			</div>
-		</div>
-
-		<div class="gallery-card">
-			<img src="/AAM_24FEB2023.jpg" alt="AAM February 2023" />
-			<div class="gallery-card-body">
-				<p class="gallery-card-title">AAM · Feb 2023</p>
-				<p class="gallery-card-caption"></p>
-			</div>
-		</div>
-
-		<div class="gallery-card">
-			<img src="/COA_10MAR2021.jpg" alt="Certificate of Achievement" />
-			<div class="gallery-card-body">
-				<p class="gallery-card-title">Certificate of Achievement · Mar 2021</p>
-				<p class="gallery-card-caption"></p>
-			</div>
-		</div>
-
 	</div>
 
 	<!-- == TRAINING & SERVICE == -->
-	<div class="section-label">
-		<h2>Training &amp; Service</h2>
-		<div class="divider"></div>
+	<div class="section-card" style="margin-bottom:60px;">
+		<div class="card">
+			<p class="section-title">Training &amp; Service</p>
+			<div class="divider"></div>
+			<div class="gallery-grid">
+
+				<div class="gallery-card" onclick="openLightbox('/BLC_29SEP2022.jpg','Basic Leader Course · Sep 2022')">
+					<img src="/BLC_29SEP2022.jpg" alt="Basic Leader Course" />
+					<div class="gallery-card-body">
+						<p class="gallery-card-title">Basic Leader Course · Sep 2022</p>
+						<p class="gallery-card-caption"></p>
+					</div>
+				</div>
+
+				<div class="gallery-card" onclick="openLightbox('/BCT_09MAY2019.jpg','Basic Combat Training · May 2019')">
+					<img src="/BCT_09MAY2019.jpg" alt="Basic Combat Training" />
+					<div class="gallery-card-body">
+						<p class="gallery-card-title">Basic Combat Training · May 2019</p>
+						<p class="gallery-card-caption"></p>
+					</div>
+				</div>
+
+				<div class="gallery-card" onclick="openLightbox('/Affiliation_30SEP2019.jpg','Affiliation · Sep 2019')">
+					<img src="/Affiliation_30SEP2019.jpg" alt="Affiliation" />
+					<div class="gallery-card-body">
+						<p class="gallery-card-title">Affiliation · Sep 2019</p>
+						<p class="gallery-card-caption"></p>
+					</div>
+				</div>
+
+				<div class="gallery-card" onclick="openLightbox('/Kuwait.jpg','Kuwait Deployment')">
+					<img src="/Kuwait.jpg" alt="Kuwait Deployment" />
+					<div class="gallery-card-body">
+						<p class="gallery-card-title">Kuwait Deployment</p>
+						<p class="gallery-card-caption"></p>
+					</div>
+				</div>
+
+				<div class="gallery-card" onclick="openLightbox('/Diploma_30SEP2019.jpg','Diploma · Sep 2019')">
+					<img src="/Diploma_30SEP2019.jpg" alt="Diploma" />
+					<div class="gallery-card-body">
+						<p class="gallery-card-title">Diploma · Sep 2019</p>
+						<p class="gallery-card-caption"></p>
+					</div>
+				</div>
+
+			</div>
+		</div>
 	</div>
 
-	<div class="gallery-wrap" style="padding-top:24px;">
-
-		<div class="gallery-card">
-			<img src="/BLC_29SEP2022.jpg" alt="Basic Leader Course" />
-			<div class="gallery-card-body">
-				<p class="gallery-card-title">Basic Leader Course · Sep 2022</p>
-				<p class="gallery-card-caption"></p>
-			</div>
-		</div>
-
-		<div class="gallery-card">
-			<img src="/BCT_09MAY2019.jpg" alt="Basic Combat Training" />
-			<div class="gallery-card-body">
-				<p class="gallery-card-title">Basic Combat Training · May 2019</p>
-				<p class="gallery-card-caption"></p>
-			</div>
-		</div>
-
-		<div class="gallery-card">
-			<img src="/Affiliation_30SEP2019.jpg" alt="Affiliation" />
-			<div class="gallery-card-body">
-				<p class="gallery-card-title">Affiliation · Sep 2019</p>
-				<p class="gallery-card-caption"></p>
-			</div>
-		</div>
-
-		<div class="gallery-card">
-			<img src="/Kuwait.jpg" alt="Kuwait Deployment" />
-			<div class="gallery-card-body">
-				<p class="gallery-card-title">Kuwait Deployment</p>
-				<p class="gallery-card-caption"></p>
-			</div>
-		</div>
-
-		<div class="gallery-card">
-			<img src="/Diploma_30SEP2019.jpg" alt="Diploma" />
-			<div class="gallery-card-body">
-				<p class="gallery-card-title">Diploma · Sep 2019</p>
-				<p class="gallery-card-caption"></p>
-			</div>
-		</div>
-
-	</div>
-
-	<!-- == FOOTER == -->
 	<footer style="border-top:1px solid #21262d;text-align:center;padding:24px;font-size:0.8rem;color:#484f58;">
 		© 2026 Michael Flaugher · Built with Astro
 	</footer>
+
+	<!-- == LIGHTBOX == -->
+	<div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLightbox()">
+		<div class="lightbox-inner">
+			<button class="lightbox-close" onclick="closeLightbox()">✕</button>
+			<img id="lightbox-img" src="" alt="" />
+			<div class="lightbox-footer">
+				<span class="lightbox-title" id="lightbox-title"></span>
+				<a class="lightbox-download" id="lightbox-download" href="" download target="_blank">Download</a>
+			</div>
+		</div>
+	</div>
+
+	<script is:inline>
+		function openLightbox(src, title) {
+			document.getElementById('lightbox-img').src = src;
+			document.getElementById('lightbox-img').alt = title;
+			document.getElementById('lightbox-title').textContent = title;
+			document.getElementById('lightbox-download').href = src;
+			document.getElementById('lightbox').classList.add('open');
+			document.body.style.overflow = 'hidden';
+		}
+		function closeLightbox() {
+			document.getElementById('lightbox').classList.remove('open');
+			document.body.style.overflow = '';
+		}
+		document.addEventListener('keydown', function(e) {
+			if (e.key === 'Escape') closeLightbox();
+		});
+	</script>
 
 </body>
 </html>
