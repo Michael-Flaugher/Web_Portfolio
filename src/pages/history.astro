@@ -414,7 +414,7 @@
 		</div>
 	</div>
 
-	<footer style="border-top:1px solid #21262d;text-align:center;padding:24px;font-size:0.8rem;color:#484f58;">
+	<footer style="border-top:1px solid #21262d;text-align:center;padding:24px 24px 60vh;font-size:0.8rem;color:#484f58;">
 		© 2026 Michael Flaugher · Built with Astro
 	</footer>
 
@@ -452,9 +452,10 @@
 			const section = document.getElementById(sectionId);
 			if (!section) return;
 
-			const card = section.querySelector('.card') || section;
-			const cardTop    = card.getBoundingClientRect().top + window.pageYOffset;
-			const cardHeight = card.offsetHeight;
+			// Target the outer wrapper so padding is included in measurement
+			const target     = section;
+			const cardTop    = target.getBoundingClientRect().top + window.pageYOffset;
+			const cardHeight = target.offsetHeight;
 			const scrollTo   = cardTop - (window.innerHeight / 2) + (cardHeight / 2);
 
 			const startY    = window.pageYOffset;
@@ -470,7 +471,10 @@
 				if (t < 1) requestAnimationFrame(scrollStep);
 			})(performance.now());
 
+			// Flash the inner card
 			setTimeout(function() {
+				const card = section.querySelector('.card');
+				if (!card) return;
 				card.classList.remove('flash');
 				void card.offsetWidth;
 				card.classList.add('flash');
