@@ -53,6 +53,62 @@
 		}
 		.back-btn:hover { border-color: #388bfd80; color: #e6edf3; }
 
+		/* == HAMBURGER == */
+		.hamburger {
+			background: none;
+			border: 1px solid #30363d;
+			border-radius: 8px;
+			padding: 8px 10px;
+			cursor: pointer;
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
+			transition: border-color 0.2s;
+		}
+		.hamburger:hover { border-color: #388bfd80; }
+		.hamburger span {
+			display: block;
+			width: 20px;
+			height: 2px;
+			background: #c9d1d9;
+			border-radius: 2px;
+			transition: all 0.25s ease;
+		}
+		.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+		.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+		.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+		/* == DROPDOWN == */
+		.nav-menu {
+			display: none;
+			position: absolute;
+			top: 66px;
+			right: 24px;
+			background: #161b22;
+			border: 1px solid #30363d;
+			border-radius: 12px;
+			padding: 8px;
+			min-width: 210px;
+			box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+			z-index: 300;
+		}
+		.nav-menu.open { display: block; }
+		.nav-menu a {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 10px 14px;
+			color: #c9d1d9;
+			text-decoration: none;
+			border-radius: 8px;
+			font-size: 0.88rem;
+			font-weight: 700;
+			font-family: Arial, sans-serif;
+			cursor: pointer;
+			transition: background 0.15s;
+		}
+		.nav-menu a:hover { background: #1c2128; color: #e6edf3; }
+
 		/* == FLAG HERO == */
 		.hero-header {
 			position: relative;
@@ -137,6 +193,14 @@
 		}
 		.gallery-card-caption { font-size: 0.85rem; line-height: 1.6; color: #8b949e; }
 
+		/* == SECTION FLASH == */
+		@keyframes sectionFlash {
+			0%   { box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
+			20%  { box-shadow: 0 0 0 2px rgba(255,255,255,0.12), 0 4px 28px rgba(56,139,253,0.18); }
+			100% { box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
+		}
+		.flash { animation: sectionFlash 1.7s ease forwards; }
+
 		/* == LIGHTBOX == */
 		.lightbox {
 			display: none;
@@ -212,6 +276,14 @@
 	<nav>
 		<a href="/" class="back-btn">← Back to Portfolio</a>
 		<span style="font-size:0.85rem;font-weight:700;color:#8b949e;font-family:'Arial Black',Arial,sans-serif;">Service History</span>
+		<button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Open navigation menu">
+			<span></span><span></span><span></span>
+		</button>
+		<div class="nav-menu" id="nav-menu">
+			<a onclick="navTo('awards')">  Awards</a>
+			<a onclick="navTo('training')">Training</a>
+			<a onclick="navTo('service')"> Service</a>
+		</div>
 	</nav>
 
 	<div class="hero-header">
@@ -222,7 +294,7 @@
 	</div>
 
 	<!-- == AWARDS == -->
-	<div class="section-card">
+	<div id="awards" class="section-card">
 		<div class="card">
 			<p class="section-title">Awards</p>
 			<div class="divider"></div>
@@ -281,7 +353,7 @@
 	</div>
 
 	<!-- == TRAINING == -->
-	<div class="section-card">
+	<div id="training" class="section-card">
 		<div class="card">
 			<p class="section-title">Training</p>
 			<div class="divider"></div>
@@ -324,7 +396,7 @@
 	</div>
 
 	<!-- == SERVICE == -->
-	<div class="section-card" style="margin-bottom:60px;">
+	<div id="service" class="section-card" style="margin-bottom:60px;">
 		<div class="card">
 			<p class="section-title">Service</p>
 			<div class="divider"></div>
@@ -359,6 +431,52 @@
 	</div>
 
 	<script is:inline>
+		function toggleMenu() {
+			document.getElementById('hamburger').classList.toggle('open');
+			document.getElementById('nav-menu').classList.toggle('open');
+		}
+
+		document.addEventListener('click', function(e) {
+			const btn  = document.getElementById('hamburger');
+			const menu = document.getElementById('nav-menu');
+			if (!btn.contains(e.target) && !menu.contains(e.target)) {
+				btn.classList.remove('open');
+				menu.classList.remove('open');
+			}
+		});
+
+		function navTo(sectionId) {
+			document.getElementById('hamburger').classList.remove('open');
+			document.getElementById('nav-menu').classList.remove('open');
+
+			const section = document.getElementById(sectionId);
+			if (!section) return;
+
+			const card = section.querySelector('.card') || section;
+			const cardTop    = card.getBoundingClientRect().top + window.pageYOffset;
+			const cardHeight = card.offsetHeight;
+			const scrollTo   = cardTop - (window.innerHeight / 2) + (cardHeight / 2);
+
+			const startY    = window.pageYOffset;
+			const distance  = Math.max(0, scrollTo) - startY;
+			const duration  = 900;
+			const startTime = performance.now();
+
+			(function scrollStep(now) {
+				const elapsed = now - startTime;
+				const t       = Math.min(elapsed / duration, 1);
+				const eased   = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2;
+				window.scrollTo(0, startY + distance * eased);
+				if (t < 1) requestAnimationFrame(scrollStep);
+			})(performance.now());
+
+			setTimeout(function() {
+				card.classList.remove('flash');
+				void card.offsetWidth;
+				card.classList.add('flash');
+			}, 700);
+		}
+
 		function openLightbox(src, title) {
 			document.getElementById('lightbox-img').src = src;
 			document.getElementById('lightbox-img').alt = title;
