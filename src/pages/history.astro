@@ -275,22 +275,34 @@
 
 	<nav>
 		<a href="/" class="back-btn">← Back to Portfolio</a>
-		<span style="font-size:0.85rem;font-weight:700;color:#8b949e;font-family:'Arial Black',Arial,sans-serif;">Service History</span>
+		<span style="position:absolute;left:50%;transform:translateX(-50%);font-size:0.85rem;font-weight:700;color:#8b949e;font-family:'Arial Black',Arial,sans-serif;">Service History</span>
 		<button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Open navigation menu">
 			<span></span><span></span><span></span>
 		</button>
 		<div class="nav-menu" id="nav-menu">
-			<a onclick="navTo('awards')">  Awards</a>
+			<a onclick="navTo('awards')">Awards</a>
 			<a onclick="navTo('training')">Training</a>
-			<a onclick="navTo('service')"> Service</a>
+			<a onclick="navTo('service')">Service</a>
 		</div>
 	</nav>
 
 	<div class="hero-header">
-		<img src="/Army_Insignia.png" alt="U.S. Army" style="width:120px;height:120px;object-fit:contain;margin:0 auto 24px;display:block;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.6));" />
+		<div style="
+			width:120px;height:120px;border-radius:50%;
+			background:linear-gradient(135deg,#1c2128,#1f2a3f);
+			border:2px solid #30363d;
+			display:flex;align-items:center;justify-content:center;
+			margin:0 auto 24px;
+			box-shadow:0 0 0 6px rgba(22,27,34,0.8),0 16px 32px rgba(0,0,0,0.4);
+			overflow:hidden;
+		">
+			<img src="/Army_Insignia.png" alt="U.S. Army" style="width:80px;height:80px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.6));" />
+		</div>
 		<p style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.14em;color:#58a6ff;margin-bottom:12px;font-weight:700;">U.S. Army Veteran</p>
 		<h1 style="font-size:2.6rem;font-weight:900;color:#e6edf3;line-height:1.1;margin-bottom:16px;">Service History</h1>
-		<p style="font-size:1rem;line-height:1.8;color:#c9d1d9;max-width:480px;margin:0 auto;">Awards, records, and highlights from my time in service.</p>
+		<p style="font-size:1rem;line-height:1.8;color:#c9d1d9;max-width:480px;margin:0 auto;">
+			Awards, records, and highlights from my time in service.
+		</p>
 	</div>
 
 	<!-- == AWARDS == -->
