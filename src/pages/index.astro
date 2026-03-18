@@ -576,10 +576,19 @@ import '../styles/global.css';
 			const section = document.getElementById(sectionId);
 			if (!section) return;
 
-			const card = section.querySelector('.card') || section;
+			const card       = section.querySelector('.card') || section;
 			const cardTop    = card.getBoundingClientRect().top + window.pageYOffset;
 			const cardHeight = card.offsetHeight;
-			const scrollTo   = cardTop - (window.innerHeight / 2) + (cardHeight / 2);
+			const navHeight  = 58;
+			const available  = window.innerHeight - navHeight;
+
+			// Tall cards: snap to top. Short cards: center in viewport.
+			let scrollTo;
+			if (cardHeight > available) {
+				scrollTo = cardTop - navHeight - 16;
+			} else {
+				scrollTo = cardTop - (window.innerHeight / 2) + (cardHeight / 2);
+			}
 
 			const startY    = window.pageYOffset;
 			const distance  = Math.max(0, scrollTo) - startY;
